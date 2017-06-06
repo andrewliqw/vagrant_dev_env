@@ -23,9 +23,9 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network "forwarded_port", guest: 80, host: 8000
-  config.vm.network "forwarded_port", guest: 8000, host: 8111
+  # config.vm.network "forwarded_port", guest: 8000, host: 8111
   config.vm.network "forwarded_port", guest: 5432, host: 54321
-  config.vm.network "forwarded_port", guest: 5050, host: 5050
+  # config.vm.network "forwarded_port", guest: 5050, host: 5050
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -40,7 +40,8 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-#   config.vm.synced_folder "H:/shared", "/home/ubuntu/shared"
+  # config.vm.synced_folder "H:/shared", "/home/ubuntu/shared/h"
+  config.vm.synced_folder "H:/AqMB/project", "/home/ubuntu/shared/h"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -71,7 +72,15 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   #   apt-get install -y apache2
   # SHELL
-  config.vm.provision "shell", path: "install.sh"
-  config.vm.provision "shell", path: "pgadmin4.sh"
+  config.vm.provision "copy-python3-requirements", type: "file", source: "requirements.txt", destination: "/home/ubuntu/requirements.txt"
+
+  config.vm.provision "copy-python3-env-install", type: "file", source: "install_python3_env.sh", destination: "/home/ubuntu/install_python3_env.sh"
+
+  config.vm.provision "install", type: "shell", path: "install.sh"
+
+  # config.vm.provision "postgres-setup", type: "shell", path: "postgres-setup.sh"
+  # config.vm.provision "pgadmin4setup", type: "shell", path: "pgadmin4setup.sh"
+  # config.vm.provision "apache2-pgadmin4-setup", type: "shell", path: "apache2-pgadmin4-setup.sh"
+  # config.vm.provision "shell", path: "pgadmin4.sh"
   # config.vm.provision "shell", path: "postgres.sh"
 end
